@@ -41,6 +41,56 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/user/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: ObjectId(id) }
+      const result = await studentCollection.findOne(query)
+      res.send(result)
+    })
+
+    // Change student image
+    app.put('/user/:id', async (req, res) => {
+      const id = req.params.id
+      const updateStudentInfo = req.body
+      const filter = { _id: ObjectId(id) }
+      const options = { upsert: true }
+      const updatedDoc = {
+        $set: {
+          img: updateStudentInfo.img,
+        },
+      }
+      const result = await studentCollection.updateOne(
+        filter,
+        updatedDoc,
+        options,
+      )
+      res.send(result)
+    })
+
+    // update students info
+    app.put('/student/:id', async (req, res) => {
+      const id = req.params.id
+      const updateStudentInfo = req.body
+      const filter = { _id: ObjectId(id) }
+      const options = { upsert: true }
+      const updatedDoc = {
+        $set: {
+          fName: updateStudentInfo.fName,
+          lName: updateStudentInfo.lName,
+          address: updateStudentInfo.address,
+          semester: updateStudentInfo.semester,
+          phone: updateStudentInfo.phone,
+          description: updateStudentInfo.description,
+        },
+      }
+      const result = await studentCollection.updateOne(
+        filter,
+        updatedDoc,
+        options,
+      )
+      res.send(result)
+    })
+
     //Delete
     app.delete('/student/:id', async (req, res) => {
       const id = req.params.id
