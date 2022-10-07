@@ -21,10 +21,27 @@ async function run() {
     const studentCollection = client.db('student').collection('students')
 
     app.get('/students', async (req, res) => {
+      console.log('query', req.query)
+      const page = parseInt(req.query.page)
+      const size = parseInt(req.query.size)
       const query = {}
       const cursor = studentCollection.find(query)
-      const students = await cursor.toArray()
+
+      let students
+      if (page || size) {
+        students = await cursor
+          .skip(page * size)
+          .limit(size)
+          .toArray()
+      } else {
+        students = await cursor.toArray()
+      }
       res.send(students)
+    })
+
+    app.get('/studentsCount', async (req, res) => {
+      const count = await studentCollection.estimatedDocumentCount()
+      res.send({ count })
     })
 
     // student post
