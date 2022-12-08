@@ -120,9 +120,9 @@ async function run() {
 run().catch(console.dir)
 
 app.get('/', (req, res) => {
-  res.send('Running student info app!', uri)
+  res.send('Running student info app!', uri, 'url')
 })
 
 app.listen(port, () => {
-  console.log('Server is running', uri)
+  console.log('Server is running', uri, 'url')
 })
